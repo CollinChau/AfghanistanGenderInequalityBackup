@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Videos - Afghanistan Gender Inequality</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" />
+    <style>
+        .carousel-container {
+          max-width: 800px;
+          margin: 40px auto;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .carousel-track {
+          display: flex;
+          transition: transform 0.5s ease-in-out;
+        }
+
+        .video-slide {
+          min-width: 100%;
+          box-sizing: border-box;
+          padding: 20px;
+          text-align: center;
+          animation: fadeUp 0.8s ease both;
+        }
+
+        .video-slide iframe {
+          width: 100%;
+          height: 400px;
+          border-radius: 10px;
+          box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-slide h3 {
+          font-size: 1.3rem;
+          margin-top: 12px;
+          margin-bottom: 6px;
+        }
+
+        .video-slide p {
+          font-size: 1rem;
+          color: #374151;
+          font-weight: 300;
+        }
+
+        /* Keyframes for Entrance Animation */
+        @keyframes fadeSlideLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-30px) translateY(-50%);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0) translateY(-50%);
+          }
+        }
+
+        @keyframes fadeSlideRight {
+          from {
+            opacity: 0;
+            transform: translateX(30px) translateY(-50%);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0) translateY(-50%);
+          }
+        }
+
+        .carousel-button {
+          position: absolute;
+          top: 43%;
+          background-color: rgba(30, 58, 138, 0.9);
+          color: white;
+          border: none;
+          font-size: 2rem;
+          padding: 8px 14px;
+          cursor: pointer;
+          z-index: 10;
+          border-radius: 6px;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          opacity: 0;
+        }
+
+        .carousel-button.left {
+          left: 10px;
+          animation: fadeSlideLeft 0.8s ease-out 0.4s forwards;
+        }
+
+        .carousel-button.right {
+          right: 10px;
+          animation: fadeSlideRight 0.8s ease-out 0.4s forwards;
+        }
+
+        .carousel-button:hover {
+          transform: translateY(-50%) scale(1.1);
+          background-color: rgba(30, 58, 138, 1);
+          box-shadow: 0 0 12px rgba(59, 130, 246, 0.6);
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">Afghanistan Gender Inequality</div>
+    <ul class="nav-links">
+        <li class="dropdown">
+            <a href="#">Overview</a>
+            <ul class="dropdown-content">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="workplace.html">Workplace</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">Geography</a>
+            <ul class="dropdown-content">
+                <li><a href="population.html">Population</a></li>
+                <li><a href="urbanrural.html">Urban vs Rural</a></li>
+                <li><a href="stats.html">Dashboard</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">Engage</a>
+            <ul class="dropdown-content">
+                <li><a href="quiz.html">Quiz</a></li>
+                <li><a href="videos.html">Videos</a></li>
+                <li><a href="takeaction.html">Take Action</a></li>
+            </ul>
+        </li>
+        <li><a href="sources.html">Works Cited</a></li>
+    </ul>
+</nav>
+
+
+
+
+<header class="hero">
+    <h1>Videos: Learn More</h1>
+    <p>Swipe through stories that show the reality Afghan women face today.</p>
+</header>
+
+<main class="carousel-container">
+    <button class="carousel-button left" onclick="moveSlide(-1)">❮</button>
+    <div class="carousel-track" id="carouselTrack">
+        <div class="video-slide">
+            <iframe src="https://www.youtube.com/embed/8GUPqbq2xIc" allowfullscreen></iframe>
+            <h3>Girls Who Risk Their Lives for Education</h3>
+            <p>This documentary follows Afghan girls attending secret schools after the Taliban banned female education. A powerful story of courage and hope.</p>
+        </div>
+        <div class="video-slide">
+            <iframe src="https://www.youtube.com/embed/ecbxvIB_XlY" allowfullscreen></iframe>
+            <h3>Life for Afghan Women After Taliban Takeover</h3>
+            <p>BBC News shows the devastating restrictions placed on women after the Taliban’s return, and how everyday life has changed dramatically.</p>
+        </div>
+        <div class="video-slide">
+            <iframe src="https://www.youtube.com/embed/1Fowf46GxXI" allowfullscreen></iframe>
+            <h3>What Afghan Women Want the World to Know</h3>
+            <p>Afghan women speak directly to the world about their fears, dreams, and the harsh new reality they face under Taliban rule.</p>
+        </div>
+    </div>
+    <button class="carousel-button right" onclick="moveSlide(1)">❯</button>
+</main>
+
+
+<script>
+    let currentSlide = 0;
+    const track = document.getElementById("carouselTrack");
+    const totalSlides = track.children.length;
+
+    function moveSlide(direction) {
+      currentSlide += direction;
+      if (currentSlide < 0) currentSlide = totalSlides - 1;
+      if (currentSlide >= totalSlides) currentSlide = 0;
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+</script>
+
+</body>
+</html>

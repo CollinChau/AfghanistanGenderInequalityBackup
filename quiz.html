@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz - Afghanistan Gender Inequality</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" />
+    <style>
+        .quiz-wrapper {
+          max-width: 800px;
+          margin: 0 auto;
+          position: relative;
+        }
+
+        .quiz-container {
+          padding: 20px;
+          overflow: hidden;
+          position: relative;
+          background: white;
+          border-radius: 8px;
+        }
+
+        .quiz-track {
+          display: flex;
+          transition: transform 0.5s ease-in-out;
+        }
+
+        .question-slide {
+          min-width: 100%;
+          box-sizing: border-box;
+          padding: 20px;
+          animation: fadeUp 0.8s ease both;
+        }
+
+        .question-slide h3 {
+          font-size: 1.25rem;
+          margin-bottom: 10px;
+        }
+
+        .option {
+          display: block;
+          margin: 6px 0;
+          padding: 10px 14px;
+          border-radius: 6px;
+          background: #e5e7eb;
+          cursor: pointer;
+          transition: background 0.3s ease;
+        }
+
+        .option:hover {
+          background: #c7d2fe;
+        }
+
+        .feedback {
+          margin-top: 10px;
+          font-weight: bold;
+        }
+
+        .carousel-button {
+          position: absolute;
+          top: 58.5%;
+          background-color: rgba(30, 58, 138, 0.9);
+          color: white;
+          border: none;
+          font-size: 2rem;
+          padding: 8px 14px;
+          cursor: pointer;
+          z-index: 100;
+          border-radius: 6px;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          opacity: 0;
+        }
+
+        .carousel-button.left {
+          left: -10px;
+          animation: fadeSlideLeft 0.8s ease-out 0.4s forwards;
+        }
+
+        .carousel-button.right {
+          right: -10px;
+          animation: fadeSlideRight 0.8s ease-out 0.4s forwards;
+        }
+
+        .carousel-button:hover {
+          transform: translateY(-50%) scale(1.1);
+          background-color: rgba(30, 58, 138, 1);
+          box-shadow: 0 0 12px rgba(59, 130, 246, 0.6);
+        }
+
+        @keyframes fadeSlideLeft {
+          from { opacity: 0; transform: translateX(-30px) translateY(-50%); }
+          to { opacity: 1; transform: translateX(0) translateY(-50%); }
+        }
+
+        @keyframes fadeSlideRight {
+          from { opacity: 0; transform: translateX(30px) translateY(-50%); }
+          to { opacity: 1; transform: translateX(0) translateY(-50%); }
+        }
+
+        .score {
+          text-align: center;
+          font-size: 1.3rem;
+          font-weight: bold;
+          color: #1e3a8a;
+          margin-top: 20px;
+        }
+
+        .restart-container {
+          display: none;
+          justify-content: center;
+          margin-top: 10px;
+        }
+
+        #restart-btn {
+          padding: 10px 20px;
+          background-color: #1e3a8a;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 1rem;
+        }
+
+        #restart-btn:hover {
+          background-color: #3749ab;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">Afghanistan Gender Inequality</div>
+    <ul class="nav-links">
+        <li class="dropdown">
+            <a href="#">Overview</a>
+            <ul class="dropdown-content">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="workplace.html">Workplace</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">Geography</a>
+            <ul class="dropdown-content">
+                <li><a href="population.html">Population</a></li>
+                <li><a href="urbanrural.html">Urban vs Rural</a></li>
+                <li><a href="stats.html">Dashboard</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">Engage</a>
+            <ul class="dropdown-content">
+                <li><a href="quiz.html">Quiz</a></li>
+                <li><a href="videos.html">Videos</a></li>
+                <li><a href="takeaction.html">Take Action</a></li>
+            </ul>
+        </li>
+        <li><a href="sources.html">Works Cited</a></li>
+    </ul>
+</nav>
+
+
+<header class="hero">
+    <h1>Interactive Quiz</h1>
+    <p>Use the arrows to go through all 15 questions. Test your knowledge!</p>
+</header>
+
+<div class="quiz-wrapper">
+    <button class="carousel-button left" onclick="moveSlide(-1)">❮</button>
+
+    <main class="quiz-container">
+        <div class="quiz-track" id="quizTrack"></div>
+    </main>
+
+    <button class="carousel-button right" onclick="moveSlide(1)">❯</button>
+</div>
+
+<div class="score" id="finalScore" style="display:none;"></div>
+<div class="restart-container" id="restartContainer">
+    <button id="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
+</div>
+
+<script>
+    const questions = [
+      { q: "What event in 2021 worsened women's rights?", options: ["Fall of Kabul", "New elections", "Peace treaty"], answer: 0 },
+      { q: "Girls are banned from what?", options: ["Driving", "University", "Internet"], answer: 1 },
+      { q: "Who warned of 5% GDP loss?", options: ["FIFA", "UNDP", "NASA"], answer: 1 },
+      { q: "What trend results from low female education?", options: ["Low birth rate", "Youth bulge", "More jobs"], answer: 1 },
+      { q: "Which jobs are banned for women?", options: ["IT", "Teaching, government", "Farming"], answer: 1 },
+      { q: "Who often enforces Taliban rules?", options: ["Women", "International groups", "Religious police"], answer: 2 },
+      { q: "What is a mahram?", options: ["Guard dog", "Male guardian", "Travel ban"], answer: 1 },
+      { q: "Which index measures gender inequality?", options: ["GDP", "GII", "HDI"], answer: 1 },
+      { q: "Taliban's control impacts mostly...", options: ["Men", "Girls and women", "Tourists"], answer: 1 },
+      { q: "Secret schools exist because...", options: ["Kids like it", "No teachers", "Education is banned"], answer: 2 },
+      { q: "What is Afghanistan's HDI level?", options: ["High", "Medium", "Low"], answer: 2 },
+      { q: "Which population group is largest?", options: ["Seniors", "Children/Youth", "Immigrants"], answer: 1 },
+      { q: "What's restricted for women in rural areas?", options: ["Phones", "Water", "Healthcare and school access"], answer: 2 },
+      { q: "Educating girls improves...", options: ["Oil exports", "Military", "Economy and development"], answer: 2 },
+      { q: "What's a key human geography concept here?", options: ["Globalization", "Spatial inequality", "Plate tectonics"], answer: 1 }
+    ];
+
+    const track = document.getElementById("quizTrack");
+    const scoreEl = document.getElementById("finalScore");
+    const restartBtn = document.getElementById("restart-btn");
+    const restartContainer = document.getElementById("restartContainer");
+    let currentSlide = 0;
+    let score = 0;
+    let answered = new Array(questions.length).fill(false);
+
+    questions.forEach((q, index) => {
+      const slide = document.createElement("div");
+      slide.className = "question-slide";
+      slide.innerHTML = `
+        <h3>${index + 1}. ${q.q}</h3>
+        ${q.options.map((opt, i) =>
+          `<div class="option" onclick="checkAnswer(${index}, ${i}, this)">${opt}</div>`).join("")}
+        <div class="feedback" id="feedback-${index}"></div>
+      `;
+      track.appendChild(slide);
+    });
+
+    function checkAnswer(index, selected, el) {
+      const correct = questions[index].answer;
+      const feedback = document.getElementById(`feedback-${index}`);
+      if (!answered[index]) {
+        if (selected === correct) {
+          score++;
+          feedback.textContent = "✅ Correct!";
+          feedback.style.color = "green";
+        } else {
+          feedback.textContent = "❌ Incorrect. Try again!";
+          feedback.style.color = "red";
+        }
+        answered[index] = true;
+      }
+
+      if (answered.every(a => a)) {
+        const percent = Math.round((score / questions.length) * 100);
+        let message = "";
+        if (percent < 50) message = "You need to learn more about gender inequality.";
+        else if (percent < 75) message = "You have some common knowledge on the topic.";
+        else if (percent < 90) message = "You have pretty decent knowledge!";
+        else message = "You have advanced knowledge!";
+
+        scoreEl.innerHTML = `🎉 Final Score: ${percent}% (${score}/${questions.length})<br>${message}`;
+        scoreEl.style.display = "block";
+        restartContainer.style.display = "flex";
+      }
+    }
+
+    function moveSlide(dir) {
+      const total = questions.length;
+      currentSlide += dir;
+      if (currentSlide < 0) currentSlide = 0;
+      if (currentSlide >= total) currentSlide = total - 1;
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    function restartQuiz() {
+      score = 0;
+      currentSlide = 0;
+      answered.fill(false);
+      track.style.transform = `translateX(0%)`;
+      document.querySelectorAll('.feedback').forEach(el => el.textContent = '');
+      scoreEl.style.display = "none";
+      restartContainer.style.display = "none";
+    }
+</script>
+
+</body>
+</html>
